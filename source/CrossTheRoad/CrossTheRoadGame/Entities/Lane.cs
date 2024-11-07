@@ -20,7 +20,8 @@ public class Lane
     public Lane(int y)
     {
         Rectangle = new Rectangle(0, y, 800, 50);
-        Type = _random.Next(1);
+        Type = _random.Next(2);
+        OnLaneVehicles = new List<Vehicle>();
 
         switch(Type)
         {
@@ -32,12 +33,15 @@ public class Lane
                 Color = Color.Gray;
                 //Texture = someOtherTexture;
                 break;
+            default:
+                Color = Color.White;
+                break;
         }
     }
 
-    public void SpawnVehicle(int type)
+    public void SpawnVehicle()
     {
         
-        OnLaneVehicles.Append(new Vehicle(this.Rectangle.Y-10, _random.Next(0, 1)));
+        OnLaneVehicles.Add(new Vehicle(this.Rectangle.Y-10, _random.Next(0, 1)));
     }
 }

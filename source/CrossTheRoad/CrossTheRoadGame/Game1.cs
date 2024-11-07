@@ -16,6 +16,9 @@ public class Game1 : Game
     private Player _player;
     private List<Lane> Lanes;
     
+    private double _timeElapsed;
+    private Random _random;
+    
     
     public Game1()
     {
@@ -40,7 +43,15 @@ public class Game1 : Game
         _texture = new Texture2D(GraphicsDevice, 1, 1);
         _texture.SetData(new Color[] { Color.DarkSlateGray });
 
-        int y = 0;
+        _random = new Random();
+        
+        _timeElapsed = 0;
+        
+        Lanes.Add(new Lane(430));
+        Lanes[0].Type = 0;
+        Lanes[0].Color = Color.Green;
+        
+        int y = -50;
         for (int i = 50; i > 0; i--)
         {
             y -= 50;
@@ -55,8 +66,32 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-
+        
         // TODO: Add your update logic here
+
+        _timeElapsed += gameTime.ElapsedGameTime.TotalSeconds;
+
+        if (_timeElapsed > _random.NextDouble())
+        {
+            for (int i = Lanes.Count - 1; i > 0; i--)
+            {
+                Lanes[i].SpawnVehicle();
+            }
+        }
+        
+        Console.WriteLine(Lanes.Count);
+
+        if (Lanes.Count > 0)
+        {
+            for (int i = Lanes.Count - 1; i >= 0; i--)
+            {
+                for (int i2 = Lanes[i].OnLaneVehicles.Count - 1; i > 0; i--)
+                {
+                    Lanes[i].OnLaneVehicles[i2].Rectangle.X += 1;
+                }
+
+            }
+        }
 
         base.Update(gameTime);
     }
